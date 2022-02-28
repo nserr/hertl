@@ -1,16 +1,23 @@
 import { React, useEffect, useState } from 'react'
-import './Home.css'
 import { Test } from './API'
+import { ColorName, ColorDivision, ColorTeam, ColorNumber, ArrowNumber, ColorPosition, ColorNationality, ArrowDivision } from './TableStyler'
 
-import { Table } from 'react-bootstrap'
+import './Home.css'
+import './customTable.css'
+import { Table, Button } from 'react-bootstrap'
 import { Autocomplete, TextField } from '@mui/material';
+
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
   const [loadingActivePlayers, setLoadingActivePlayers] = useState(true)
 
+  const [allTeams, setAllTeams] = useState([])
   const [activePlayers, setActivePlayers] = useState([])
   const [playerAnswer, setPlayerAnswer] = useState([])
+
+  const [guesses, setGuesses] = useState([])
+  const [curGuess, setCurGuess] = useState(null)
 
   // Fetch all active NHL players.
   useEffect(() => {
@@ -20,7 +27,7 @@ export default function Home() {
       const teams = await fetch(`${url}/teams`)
         .then((res) => res.json())
         .then((json) => json['teams'])
-
+      
       const rosters = await Promise.all(teams.map((team) =>
         fetch(`${url}/teams/${team.id}/roster`)
           .then((res) => res.json())
@@ -39,6 +46,7 @@ export default function Home() {
           .then((json) => json['people'][0])
       ))
 
+      setAllTeams(teams)
       setActivePlayers(players)
       setLoadingActivePlayers(false)
     }
@@ -61,6 +69,7 @@ export default function Home() {
   // Control loading state.
   useEffect(() => {
     if (playerAnswer.length !== 0) {
+      playerAnswer.division = getDivision(playerAnswer.currentTeam.id)
       setLoading(false)
     }
 
@@ -69,56 +78,88 @@ export default function Home() {
   }, [playerAnswer])
 
 
-  // API testing.
-  const handleClick = () => {
-    Test()
+  function getDivision(id) {
+    return (allTeams.find(team => team.id === id).division.nameShort)
   }
 
-  
-  const PlayerTable = () => {
+  const handleGuess = () => {
+    setGuesses(guesses.concat(curGuess))
+
+    if (curGuess === playerAnswer) {
+      console.log('win')
+    } else {
+      console.log('loss')
+    }
+
+    setCurGuess(null)
+  }
+
+
+  const GuessBox = () => {
     return (
-      <Table striped bordered hover variant="dark">
+      <Autocomplete
+        disablePortal
+        id="guess-box"
+        sx={{ width: 600 }}
+        value={curGuess}
+        onChange={(_event, newGuess) => { setCurGuess(newGuess) }}
+        options={activePlayers}
+        getOptionLabel={(option) => `${option.fullName}`}
+        renderInput={(params) => <TextField {...params} label="Player" />}
+        renderOption={(props, option) => {
+          return (
+            <li {...props} key={option.id}>
+              {option.fullName}
+            </li>
+          )
+        }}
+      />
+    )
+  }
+
+  const GuessButton = () => {
+    return (
+      <Button
+        variant="success"
+        size="lg"
+        disabled={curGuess === null}
+        onClick={handleGuess}
+      >
+        Guess
+      </Button>
+    )
+  }
+
+  function PlayerGuesses() {
+    const entries = guesses.map((guess) => (
+      <tr key={guess.id}>
+        <td className="guess-number">{guesses.indexOf(guess)+1}</td>
+        <td style={{ background: ColorName(playerAnswer, guess)}}>{guess.fullName}</td>
+        <td style={{ background: ColorDivision(playerAnswer.division, getDivision(guess.currentTeam.id))}}>{getDivision(guess.currentTeam.id)} {ArrowDivision(playerAnswer.division, getDivision(guess.currentTeam.id))}</td>
+        <td style={{ background: ColorTeam(playerAnswer, guess) }}>{guess.currentTeam.name}</td>
+        <td style={{ background: ColorNumber(playerAnswer, guess) }}>{guess.primaryNumber} {ArrowNumber(playerAnswer, guess)}</td>
+        <td style={{ background: ColorPosition(playerAnswer, guess)}}>{guess.primaryPosition.abbreviation}</td>
+        <td style={{ background: ColorNationality(playerAnswer, guess)}}>{guess.nationality}</td>
+      </tr>
+    ))
+
+    return (
+      <table className="table table-striped custom-table">
         <thead>
           <tr>
-            <th>Guess</th>
-            <th>Player</th>
-            <th>Division</th>
-            <th>Team</th>
-            <th>Number</th>
-            <th>Position</th>
-            <th>Nationality</th>
+            <th className="guess-number" scope="col">Guess</th>
+            <th scope="col">Player</th>
+            <th scope="col">Division</th>
+            <th scope="col">Team</th>
+            <th scope="col">Number</th>
+            <th scope="col">Position</th>
+            <th scope="col">Nationality</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>{playerAnswer.fullName}</td>
-            <td></td>
-            <td>{playerAnswer.currentTeam.name}</td>
-            <td>{playerAnswer.primaryNumber}</td>
-            <td>{playerAnswer.primaryPosition.abbreviation}</td>
-            <td>{playerAnswer.nationality}</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
+          {entries}
         </tbody>
-      </Table>
+      </table>
     )
   }
 
@@ -128,28 +169,13 @@ export default function Home() {
         <div>loading...</div>
       ) : (
         <div>
-          <PlayerTable />
-          <Autocomplete
-            disablePortal
-            id="combo-box"
-            options={activePlayers}
-            getOptionLabel={(option) => `${option.fullName}`}
-            renderOption={(props, option) => {
-              return (
-                <li {...props} key={option.id}>
-                  {option.fullName}
-                </li>
-              )
-            }}
-            sx={{ width: 600 }}
-            renderInput={(params) => <TextField {...params} label="Player" />}
-          />
+          {console.log(playerAnswer)}
+          <PlayerGuesses />
+          <GuessBox />
+          <GuessButton />
+
         </div>
       )}
-
-      <button onClick={handleClick}>
-        test
-      </button>
     </div>
   )
 }
