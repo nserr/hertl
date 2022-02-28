@@ -3,41 +3,46 @@ import './Home.css'
 import { Test } from './API'
 
 import { Table } from 'react-bootstrap'
+import { Autocomplete } from '@mui/material';
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
-  const [roster, setRoster] = useState([])
+  const [activePlayers, setActivePlayers] = useState([])
   const [player, setPlayer] = useState([])
 
-
-  // Get random team roster.
+  // Fetch all active NHL players.
   useEffect(() => {
-    const min = 1
-    const max = 32
-    const rand = Math.floor(min + (Math.random() * (max - min)))
-
-    fetch(`https://statsapi.web.nhl.com/api/v1/teams/${rand}/roster`)
+    fetch("https://statsapi.web.nhl.com/api/v1/teams")
       .then((res) => res.json())
-      .then((json) => setRoster(json['roster']))
-      .catch((error) => console.log(error))
-
+      .then((json) => {
+        json.teams.forEach((team) => {
+          fetch(`https://statsapi.web.nhl.com/api/v1/teams/${team.id}/roster`)
+            .then((res) => res.json())
+            .then((json) => {
+              json.roster.forEach((player) => {
+                fetch(`https://statsapi.web.nhl.com/api/v1/people/${player.person.id}`)
+                  .then((res) => res.json())
+                  .then((json) => json['people'])
+                  .then((player) => {
+                    setActivePlayers(activePlayers => [...activePlayers, player[0]])
+                  })
+              })
+            })
+        })
+      })
   }, [])
 
-  // Get random player from set roster.
+  // Get random active player.
   useEffect(() => {
-    if (roster.length !== 0) {
+    if (activePlayers.length !== 0) {
       const min = 0
-      const max = roster.length - 1
+      const max = activePlayers.length - 1
       const rand = Math.floor(min + (Math.random() * (max - min)))
-      const id = roster[rand].person.id
 
-      fetch(`https://statsapi.web.nhl.com/api/v1/people/${id}`)
-        .then((res) => res.json())
-        .then((json) => setPlayer(json['people']))
-        .catch((error) => console.log(error))
+      setPlayer(activePlayers[rand])
     }
 
-  }, [roster])
+  }, [activePlayers])
 
   // Control loading state.
   useEffect(() => {
@@ -61,18 +66,22 @@ export default function Home() {
           <tr>
             <th>Guess</th>
             <th>Player</th>
+            <th>Division</th>
             <th>Team</th>
             <th>Number</th>
             <th>Position</th>
+            <th>Nationality</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>1</td>
-            <td>{player[0].firstName} {player[0].lastName}</td>
-            <td>{player[0].currentTeam.name}</td>
-            <td>{player[0].primaryNumber}</td>
-            <td>{player[0].primaryPosition.abbreviation}</td>
+            <td>{player.fullName}</td>
+            <td></td>
+            <td>{player.currentTeam.name}</td>
+            <td>{player.primaryNumber}</td>
+            <td>{player.primaryPosition.abbreviation}</td>
+            <td></td>
           </tr>
           <tr>
             <td>2</td>
@@ -80,9 +89,13 @@ export default function Home() {
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
             <td>3</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
