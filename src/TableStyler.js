@@ -2,14 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 const green = '#97C1A9'
-const yellow = '#FFC8A2'
+const orange = '#FFC8A2'
 const transparent = 'transparent'
 
 export function ColorName(answer, guess) {
   if (answer.fullName === guess.fullName) {
     return green
   } else if (answer.firstName === guess.firstName || answer.lastName === guess.lastName) {
-    return yellow
+    return orange
   } else {
     return transparent
   }
@@ -73,7 +73,7 @@ export function ColorPosition(answer, guess) {
   if (answer.primaryPosition.abbreviation === guess.primaryPosition.abbreviation) {
     return green
   } else if (answer.primaryPosition.type === guess.primaryPosition.type) {
-    return yellow
+    return orange
   } else {
     return transparent
   }
