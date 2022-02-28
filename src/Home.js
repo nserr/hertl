@@ -1,9 +1,8 @@
 import { React, useEffect, useState } from 'react'
-import { Test } from './API'
 import { ColorName, ColorDivision, ColorTeam, ColorNumber, ArrowNumber, ColorPosition, ColorNationality, ArrowDivision } from './TableStyler'
 
-import './Home.css'
-import './customTable.css'
+import './styles/Home.css'
+import './styles/customTable.css'
 import { Table, Button } from 'react-bootstrap'
 import { Autocomplete, TextField } from '@mui/material';
 

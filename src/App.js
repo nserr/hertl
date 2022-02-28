@@ -1,4 +1,4 @@
-import './App.css'
+import './styles/App.css'
 import Home from './Home'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
