@@ -5,12 +5,13 @@ import { Header } from './Header'
 
 import './styles/Home.css'
 import './styles/customTable.css'
-import { Button, Spinner } from 'react-bootstrap'
-import { Autocomplete, TextField } from '@mui/material';
+import { Button, Spinner, Modal } from 'react-bootstrap'
+import { Autocomplete, TextField } from '@mui/material'
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
   const [loadingActivePlayers, setLoadingActivePlayers] = useState(true)
+  const [showGameOverModal, setShowGameOverModal] = useState(false)
 
   const [allTeams, setAllTeams] = useState([])
   const [activePlayers, setActivePlayers] = useState([])
@@ -18,6 +19,12 @@ export default function Home() {
 
   const [guesses, setGuesses] = useState([])
   const [curGuess, setCurGuess] = useState(null)
+
+  const [gameOver, setGameOver] = useState(false)
+  const [victory, setVictory] = useState(false)
+
+  const handleCloseGameOverModal = () => setShowGameOverModal(false)
+  const handleShowGameOverModal = () => setShowGameOverModal(true)
 
   // Fetch all active NHL players.
   useEffect(() => {
@@ -82,16 +89,58 @@ export default function Home() {
     return (allTeams.find(team => team.id === id).division.nameShort)
   }
 
+  function GameOverModal() {
+    const title = victory ? "Nice!" : "Game Over"
+    const body = victory ?
+      `You correctly guessed ${playerAnswer.fullName} in ${guesses.length} tries.` :
+      `The correct player was ${playerAnswer.fullName}. Better luck next time!`
+
+    return (
+      <Modal centered show={showGameOverModal} onHide={handleCloseGameOverModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {title}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {body}
+          <table className="table table-striped custom-table" style={{ marginTop: '2rem' }}>
+            <tbody>
+              <tr>
+                <td style={{ width: '5rem' }}>{playerAnswer.fullName}</td>
+                <td style={{ width: '5rem' }}>{playerAnswer.division}</td>
+                <td style={{ width: '5rem' }}>{playerAnswer.currentTeam.name}</td>
+                <td style={{ width: '5rem' }}>{playerAnswer.primaryNumber}</td>
+                <td style={{ width: '5rem' }}>{playerAnswer.primaryPosition.abbreviation}</td>
+                <td style={{ width: '5rem' }}>{playerAnswer.nationality}</td>
+              </tr>
+            </tbody>
+
+          </table>
+        </Modal.Body>
+        <Modal.Footer>
+          Footer
+        </Modal.Footer>
+      </Modal>
+    )
+  }
+
   // Runs when a guess is made.
   const handleGuess = () => {
-    setGuesses(guesses.concat(curGuess))
 
     if (curGuess === playerAnswer) {
-      console.log('win')
+      setVictory(true)
+      setGameOver(true)
+      handleShowGameOverModal()
     } else {
-      console.log('wrong')
+      if (guesses.length === 9) {
+        setVictory(false)
+        setGameOver(true)
+        handleShowGameOverModal()
+      }
     }
 
+    setGuesses(guesses.concat(curGuess))
     setCurGuess(null)
   }
 
@@ -99,14 +148,15 @@ export default function Home() {
   const GuessBox = () => {
     return (
       <Autocomplete
+        className="player-guess-box"
         disablePortal
+        disabled={gameOver}
         id="guess-box"
-        sx={{ width: '100%' }}
         value={curGuess}
         onChange={(_event, newGuess) => { setCurGuess(newGuess) }}
         options={activePlayers}
         getOptionLabel={(option) => `${option.fullName}`}
-        renderInput={(params) => <TextField {...params} label="Player" />}
+        renderInput={(params) => <TextField {...params} label="Choose a Player" />}
         renderOption={(props, option) => {
           return (
             <li {...props} key={option.id}>
@@ -122,12 +172,12 @@ export default function Home() {
   const GuessButton = () => {
     return (
       <Button
-        variant="success"
+        className="guess-button"
         size="lg"
         disabled={curGuess === null}
         onClick={handleGuess}
       >
-        Guess
+        GUESS
       </Button>
     )
   }
@@ -179,9 +229,11 @@ export default function Home() {
         <div>
           {console.log(playerAnswer)}
           <PlayerGuesses />
-          <GuessBox />
-          <GuessButton />
-
+          <GameOverModal />
+          <div className="guess-input">
+            <GuessBox />
+            <GuessButton />
+          </div>
         </div>
       )}
     </div>
