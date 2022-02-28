@@ -106,22 +106,19 @@ export default function Home() {
         </Modal.Header>
         <Modal.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {body}
-          <table className="table table-striped custom-table" style={{ marginTop: '2rem' }}>
+          <table className="table table-striped custom-table" style={{ marginTop: '1rem' }}>
             <tbody>
               <tr>
-                <td style={{ width: '5rem' }}>{playerAnswer.fullName}</td>
-                <td style={{ width: '5rem' }}>{playerAnswer.division}</td>
-                <td style={{ width: '5rem' }}>{playerAnswer.currentTeam.name}</td>
-                <td style={{ width: '5rem' }}>{playerAnswer.primaryNumber}</td>
-                <td style={{ width: '5rem' }}>{playerAnswer.primaryPosition.abbreviation}</td>
-                <td style={{ width: '5rem' }}>{playerAnswer.nationality}</td>
+                <td style={{ width: '8rem' }}>{playerAnswer.fullName}</td>
+                <td style={{ width: '8rem' }}>{playerAnswer.division}</td>
+                <td style={{ width: '8rem' }}>{playerAnswer.currentTeam.name}</td>
+                <td style={{ width: '8rem' }}>{playerAnswer.primaryNumber}</td>
+                <td style={{ width: '8rem' }}>{playerAnswer.primaryPosition.abbreviation}</td>
+                <td style={{ width: '8rem' }}>{playerAnswer.nationality}</td>
               </tr>
             </tbody>
           </table>
         </Modal.Body>
-        <Modal.Footer>
-          Footer
-        </Modal.Footer>
       </Modal>
     )
   }
