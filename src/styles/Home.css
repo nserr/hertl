@@ -8,6 +8,10 @@
   color: white;
 }
 
+.main-body {
+  flex-grow: 1;
+}
+
 .guess-input {
   display: flex;
   align-items: center;
@@ -38,6 +42,10 @@
   width: 100%;
   margin-bottom: 2rem;
   font-weight: 300 !important;
+}
+
+.footer {
+  width: 100%;
 }
 
 .MuiOutlinedInput-root .MuiAutocomplete-input {

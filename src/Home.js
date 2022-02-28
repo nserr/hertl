@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react'
 import { ColorName, ColorDivision, ColorTeam, ColorNumber, ArrowNumber, ColorPosition, ColorNationality, ArrowDivision } from './TableStyler'
 
 import { Header } from './Header'
+import { Footer } from './Footer'
 
 import './styles/Home.css'
 import './styles/customTable.css'
@@ -128,7 +129,7 @@ export default function Home() {
 
   const handleNewGame = () => {
     setGuesses([])
-  
+
     const min = 0
     const max = activePlayers.length - 1
     const rand = Math.floor(min + (Math.random() * (max - min)))
@@ -246,24 +247,29 @@ export default function Home() {
   return (
     <div className="main">
       <Header />
-      {loading ? (
-        <div>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </div>
-      ) : (
-        <div>
-          {console.log(playerAnswer)}
-          {gameOver ? <NewGameButton /> : null}
-          <PlayerGuesses />
-          <GameOverModal />
-          <div className="guess-input">
-            <GuessBox />
-            <GuessButton />
+      <div className="main-body">
+        {loading ? (
+          <div>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
           </div>
-        </div>
-      )}
+        ) : (
+          <div>
+            {console.log(playerAnswer)}
+            {gameOver ? <NewGameButton /> : null}
+            <PlayerGuesses />
+            <GameOverModal />
+            <div className="guess-input">
+              <GuessBox />
+              <GuessButton />
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="footer">
+        <Footer />
+      </div>
     </div>
   )
 }
