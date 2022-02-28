@@ -1,0 +1,50 @@
+.custom-table {
+  width: 100%;
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+  
+.custom-table thead tr, .custom-table thead th {
+  padding-bottom: 2rem;
+  width: 15vmin;
+  border-top: none;
+  border-bottom: none !important;
+  color: #fff;
+  font-size: small;
+  text-transform: uppercase;
+  letter-spacing: .2rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.custom-table tbody th, .custom-table tbody td {
+  color: rgb(150, 150, 150);
+  font-weight: 400;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+  font-weight: 300;
+  border: none;
+  -webkit-transition: .3s all ease;
+  -o-transition: .3s all ease;
+  transition: .3s all ease;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.custom-table tbody tr {
+  -webkit-transition: .3s all ease;
+  -o-transition: .3s all ease;
+  transition: .3s all ease;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.custom-table tbody tr:hover td, .custom-table tbody tr:focus td {
+  color: #fff !important;
+}
+
+.table-striped>tbody>tr:nth-child(odd)> td {
+  color: #777;
+}
