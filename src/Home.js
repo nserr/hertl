@@ -117,7 +117,6 @@ export default function Home() {
                 <td style={{ width: '5rem' }}>{playerAnswer.nationality}</td>
               </tr>
             </tbody>
-
           </table>
         </Modal.Body>
         <Modal.Footer>
