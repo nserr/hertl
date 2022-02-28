@@ -1,11 +1,12 @@
 import { React, useEffect, useState } from 'react'
 import { ColorName, ColorDivision, ColorTeam, ColorNumber, ArrowNumber, ColorPosition, ColorNationality, ArrowDivision } from './TableStyler'
 
+import { Header } from './Header'
+
 import './styles/Home.css'
 import './styles/customTable.css'
-import { Table, Button } from 'react-bootstrap'
+import { Button, Spinner } from 'react-bootstrap'
 import { Autocomplete, TextField } from '@mui/material';
-
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
@@ -26,7 +27,7 @@ export default function Home() {
       const teams = await fetch(`${url}/teams`)
         .then((res) => res.json())
         .then((json) => json['teams'])
-      
+
       const rosters = await Promise.all(teams.map((team) =>
         fetch(`${url}/teams/${team.id}/roster`)
           .then((res) => res.json())
@@ -76,30 +77,31 @@ export default function Home() {
 
   }, [playerAnswer])
 
-
+  // Helper function to return a player's division.
   function getDivision(id) {
     return (allTeams.find(team => team.id === id).division.nameShort)
   }
 
+  // Runs when a guess is made.
   const handleGuess = () => {
     setGuesses(guesses.concat(curGuess))
 
     if (curGuess === playerAnswer) {
       console.log('win')
     } else {
-      console.log('loss')
+      console.log('wrong')
     }
 
     setCurGuess(null)
   }
 
-
+  // Input field where guesses are made.
   const GuessBox = () => {
     return (
       <Autocomplete
         disablePortal
         id="guess-box"
-        sx={{ width: 600 }}
+        sx={{ width: '100%' }}
         value={curGuess}
         onChange={(_event, newGuess) => { setCurGuess(newGuess) }}
         options={activePlayers}
@@ -116,6 +118,7 @@ export default function Home() {
     )
   }
 
+  // Submit button for guesses.
   const GuessButton = () => {
     return (
       <Button
@@ -129,16 +132,17 @@ export default function Home() {
     )
   }
 
+  // Table to display user's guesses.
   function PlayerGuesses() {
     const entries = guesses.map((guess) => (
       <tr key={guess.id}>
-        <td className="guess-number">{guesses.indexOf(guess)+1}</td>
-        <td style={{ background: ColorName(playerAnswer, guess)}}>{guess.fullName}</td>
-        <td style={{ background: ColorDivision(playerAnswer.division, getDivision(guess.currentTeam.id))}}>{getDivision(guess.currentTeam.id)} {ArrowDivision(playerAnswer.division, getDivision(guess.currentTeam.id))}</td>
+        <td className="guess-number">{guesses.indexOf(guess) + 1}</td>
+        <td style={{ background: ColorName(playerAnswer, guess) }}>{guess.fullName}</td>
+        <td style={{ background: ColorDivision(playerAnswer.division, getDivision(guess.currentTeam.id)) }}>{getDivision(guess.currentTeam.id)} {ArrowDivision(playerAnswer.division, getDivision(guess.currentTeam.id))}</td>
         <td style={{ background: ColorTeam(playerAnswer, guess) }}>{guess.currentTeam.name}</td>
         <td style={{ background: ColorNumber(playerAnswer, guess) }}>{guess.primaryNumber} {ArrowNumber(playerAnswer, guess)}</td>
-        <td style={{ background: ColorPosition(playerAnswer, guess)}}>{guess.primaryPosition.abbreviation}</td>
-        <td style={{ background: ColorNationality(playerAnswer, guess)}}>{guess.nationality}</td>
+        <td style={{ background: ColorPosition(playerAnswer, guess) }}>{guess.primaryPosition.abbreviation}</td>
+        <td style={{ background: ColorNationality(playerAnswer, guess) }}>{guess.nationality}</td>
       </tr>
     ))
 
@@ -164,8 +168,13 @@ export default function Home() {
 
   return (
     <div className="main">
+      <Header />
       {loading ? (
-        <div>loading...</div>
+        <div>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
       ) : (
         <div>
           {console.log(playerAnswer)}

@@ -3,7 +3,7 @@ import { faArrowDown, faArrowUp, faArrowLeft, faArrowRight } from '@fortawesome/
 
 const green = '#97C1A9'
 const yellow = '#FFC8A2'
-const grey = 'transparent'
+const transparent = 'transparent'
 
 export function ColorName(answer, guess) {
   if (answer.fullName === guess.fullName) {
@@ -11,7 +11,7 @@ export function ColorName(answer, guess) {
   } else if (answer.firstName === guess.firstName || answer.lastName === guess.lastName) {
     return yellow
   } else {
-    return grey
+    return transparent
   }
 }
 
@@ -19,7 +19,7 @@ export function ColorDivision(answer, guess) {
   if (answer === guess) {
     return green
   } else {
-    return grey
+    return transparent
   }
 }
 
@@ -44,7 +44,7 @@ export function ColorTeam(answer, guess) {
   if (answer.currentTeam.name === guess.currentTeam.name) {
     return green
   } else {
-    return grey
+    return transparent
   }
 }
 
@@ -52,7 +52,7 @@ export function ColorNumber(answer, guess) {
   if (answer.primaryNumber === guess.primaryNumber) {
     return green
   } else {
-    return grey
+    return transparent
   }
 }
 
@@ -75,7 +75,7 @@ export function ColorPosition(answer, guess) {
   } else if (answer.primaryPosition.type === guess.primaryPosition.type) {
     return yellow
   } else {
-    return grey
+    return transparent
   }
 }
 
@@ -83,6 +83,6 @@ export function ColorNationality(answer, guess) {
   if (answer.nationality === guess.nationality) {
     return green
   } else {
-    return grey
+    return transparent
   }
 }
