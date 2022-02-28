@@ -89,6 +89,7 @@ export default function Home() {
     return (allTeams.find(team => team.id === id).division.nameShort)
   }
 
+  // Modal panel that shows on win/loss.
   function GameOverModal() {
     const title = victory ? "Nice!" : "Game Over"
     const body = victory ?
@@ -122,6 +123,32 @@ export default function Home() {
           Footer
         </Modal.Footer>
       </Modal>
+    )
+  }
+
+  const handleNewGame = () => {
+    setGuesses([])
+  
+    const min = 0
+    const max = activePlayers.length - 1
+    const rand = Math.floor(min + (Math.random() * (max - min)))
+    setPlayerAnswer(activePlayers[rand])
+
+    setGameOver(false)
+    setVictory(false)
+  }
+
+  const NewGameButton = () => {
+    return (
+      <Button
+        className="new-game-button"
+        variant="outline-light"
+        size="lg"
+        disabled={!gameOver}
+        onClick={handleNewGame}
+      >
+        Start a New Game
+      </Button>
     )
   }
 
@@ -228,6 +255,7 @@ export default function Home() {
       ) : (
         <div>
           {console.log(playerAnswer)}
+          {gameOver ? <NewGameButton /> : null}
           <PlayerGuesses />
           <GameOverModal />
           <div className="guess-input">

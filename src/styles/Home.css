@@ -34,6 +34,12 @@
   transition: 0.3s ease;
 }
 
+.new-game-button {
+  width: 100%;
+  margin-bottom: 2rem;
+  font-weight: 300 !important;
+}
+
 .MuiOutlinedInput-root .MuiAutocomplete-input {
   color: #bbb;
 }
