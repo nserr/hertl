@@ -1,0 +1,14 @@
+.header-main {
+  background: #97C1A9;
+  height: 8rem;
+  width: 100%;
+  margin-bottom: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-name {
+  font-size: xx-large;
+  font-weight: bold;
+}
