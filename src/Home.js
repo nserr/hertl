@@ -27,6 +27,7 @@ export default function Home() {
   const handleCloseGameOverModal = () => setShowGameOverModal(false)
   const handleShowGameOverModal = () => setShowGameOverModal(true)
 
+
   // Fetch all active NHL players.
   useEffect(() => {
     async function getData() {
@@ -62,6 +63,7 @@ export default function Home() {
     getData()
   }, [])
 
+
   // Get random active player.
   useEffect(() => {
     if (!loadingActivePlayers) {
@@ -71,8 +73,8 @@ export default function Home() {
 
       setPlayerAnswer(activePlayers[rand])
     }
-
   }, [loadingActivePlayers, activePlayers])
+
 
   // Control loading state.
   useEffect(() => {
@@ -80,15 +82,14 @@ export default function Home() {
       playerAnswer.division = getDivision(playerAnswer.currentTeam.id)
       setLoading(false)
     }
-
-    console.log(playerAnswer)
-
   }, [playerAnswer])
+
 
   // Helper function to return a player's division.
   function getDivision(id) {
     return (allTeams.find(team => team.id === id).division.nameShort)
   }
+
 
   // Writes to local storage to save statistics.
   function writeToLocal(result) {
@@ -111,6 +112,7 @@ export default function Home() {
       localStorage.setItem("hertl_TotalLosses", JSON.stringify(totalLosses))
     }
   }
+
 
   // Modal panel that shows on win/loss.
   function GameOverModal() {
@@ -145,6 +147,7 @@ export default function Home() {
     )
   }
 
+
   // Helper function for starting new game.
   const handleNewGame = () => {
     setGuesses([])
@@ -157,6 +160,7 @@ export default function Home() {
     setGameOver(false)
     setVictory(false)
   }
+
 
   // Button for starting new game.
   const NewGameButton = () => {
@@ -172,6 +176,7 @@ export default function Home() {
       </Button>
     )
   }
+
 
   // Runs when a guess is made.
   const handleGuess = () => {
@@ -192,6 +197,7 @@ export default function Home() {
     setGuesses(guesses.concat(curGuess))
     setCurGuess(null)
   }
+
 
   // Input field where guesses are made.
   const GuessBox = () => {
@@ -217,6 +223,7 @@ export default function Home() {
     )
   }
 
+
   // Submit button for guesses.
   const GuessButton = () => {
     return (
@@ -230,6 +237,7 @@ export default function Home() {
       </Button>
     )
   }
+
 
   // Table to display user's guesses.
   function PlayerGuesses() {
@@ -263,9 +271,10 @@ export default function Home() {
     )
   }
 
+
   return (
     <div className="main">
-      <Header number={guesses.length}/>
+      <Header number={guesses.length} />
       <div className="main-body">
         {loading ? (
           <div>
@@ -275,7 +284,6 @@ export default function Home() {
           </div>
         ) : (
           <div>
-            {console.log(playerAnswer)}
             {gameOver ? <NewGameButton /> : null}
             <PlayerGuesses />
             <GameOverModal />
