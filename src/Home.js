@@ -90,6 +90,28 @@ export default function Home() {
     return (allTeams.find(team => team.id === id).division.nameShort)
   }
 
+  // Writes to local storage to save statistics.
+  function writeToLocal(result) {
+    let streak = localStorage.getItem("hertl_CurStreak")
+    let totalWins = localStorage.getItem("hertl_TotalWins")
+    let totalLosses = localStorage.getItem("hertl_TotalLosses")
+
+    if (streak === null) { streak = 0 }
+    if (totalWins === null) { totalWins = 0 }
+    if (totalLosses === null) { totalLosses = 0 }
+
+    if (result === "win") {
+      streak++
+      totalWins++
+      localStorage.setItem("hertl_CurStreak", JSON.stringify(streak))
+      localStorage.setItem("hertl_TotalWins", JSON.stringify(totalWins))
+    } else if (result === "loss") {
+      totalLosses++
+      localStorage.setItem("hertl_CurStreak", JSON.stringify(0))
+      localStorage.setItem("hertl_TotalLosses", JSON.stringify(totalLosses))
+    }
+  }
+
   // Modal panel that shows on win/loss.
   function GameOverModal() {
     const title = victory ? "Nice!" : "Game Over"
@@ -123,6 +145,7 @@ export default function Home() {
     )
   }
 
+  // Helper function for starting new game.
   const handleNewGame = () => {
     setGuesses([])
 
@@ -135,6 +158,7 @@ export default function Home() {
     setVictory(false)
   }
 
+  // Button for starting new game.
   const NewGameButton = () => {
     return (
       <Button
@@ -151,15 +175,16 @@ export default function Home() {
 
   // Runs when a guess is made.
   const handleGuess = () => {
-
     if (curGuess === playerAnswer) {
       setVictory(true)
       setGameOver(true)
+      writeToLocal("win")
       handleShowGameOverModal()
     } else {
       if (guesses.length === 9) {
         setVictory(false)
         setGameOver(true)
+        writeToLocal("loss")
         handleShowGameOverModal()
       }
     }
@@ -240,6 +265,12 @@ export default function Home() {
     )
   }
 
+  const reset = () => {
+    localStorage.setItem("hertl_CurStreak", JSON.stringify(0))
+    localStorage.setItem("hertl_TotalWins", JSON.stringify(0))
+    localStorage.setItem("hertl_TotalLosses", JSON.stringify(0))
+  }
+
   return (
     <div className="main">
       <Header />
@@ -259,6 +290,9 @@ export default function Home() {
             <div className="guess-input">
               <GuessBox />
               <GuessButton />
+              <Button onClick={reset}>
+                reset
+              </Button>
             </div>
           </div>
         )}
