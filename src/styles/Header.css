@@ -2,7 +2,7 @@
   background: #97C1A9;
   height: 8rem;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,4 +43,8 @@
 .stat {
   font-weight: bold;
   font-size: x-large;
+}
+
+.guess-counter {
+  cursor: default !important;
 }

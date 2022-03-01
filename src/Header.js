@@ -6,7 +6,7 @@ import hertlLogo from './images/hertlLogo.png'
 import './styles/Header.css'
 import './styles/customTable.css'
 
-export function Header() {
+export function Header(props) {
   const [showRulesModal, setShowRulesModal] = useState(true)
   const [showStatsModal, setShowStatsModal] = useState(false)
 
@@ -84,7 +84,7 @@ export function Header() {
           </Modal.Header>
           <Modal.Body>
             You have 10 attempts to guess the currently active NHL player.<br />
-            If the correct player shares no attributes with your guess, the color of the cell will not change.
+            If the correct player shares no attributes with your guess, the color of the cells will not change.
             {RulesTable1()}
             The arrows under Division point in the direction of the correct division.
             From West to East, that is <strong>Pacific</strong>, <strong>Central</strong>, <strong>Atlantic</strong>, <strong>Metropolitan</strong>.<br />
@@ -150,6 +150,14 @@ export function Header() {
     )
   }
 
+  function GuessCounter() {
+    return (
+      <Button className="guess-counter" variant="light">
+        {props.number} / 10
+      </Button>
+    )
+  }
+
   return (
     <>
       <div className="header-main">
@@ -159,6 +167,7 @@ export function Header() {
       </div>
       <div className="header-buttons">
         <RulesModal />
+        <GuessCounter />
         <StatsModal />
       </div>
     </>

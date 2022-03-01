@@ -235,7 +235,6 @@ export default function Home() {
   function PlayerGuesses() {
     const entries = guesses.map((guess) => (
       <tr key={guess.id}>
-        <td className="guess-number">{guesses.indexOf(guess) + 1}</td>
         <td style={{ background: ColorName(playerAnswer, guess) }}>{guess.fullName}</td>
         <td style={{ background: ColorDivision(playerAnswer.division, getDivision(guess.currentTeam.id)) }}>{getDivision(guess.currentTeam.id)} {ArrowDivision(playerAnswer.division, getDivision(guess.currentTeam.id))}</td>
         <td style={{ background: ColorTeam(playerAnswer, guess) }}>{guess.currentTeam.name}</td>
@@ -249,13 +248,12 @@ export default function Home() {
       <table className="table table-striped custom-table">
         <thead>
           <tr>
-            <th className="guess-number" scope="col">Guess</th>
             <th scope="col">Player</th>
-            <th scope="col">Division</th>
+            <th scope="col">Div</th>
             <th scope="col">Team</th>
-            <th scope="col">Number</th>
-            <th scope="col">Position</th>
-            <th scope="col">Nationality</th>
+            <th scope="col">#</th>
+            <th scope="col">Pos</th>
+            <th scope="col">Nat</th>
           </tr>
         </thead>
         <tbody>
@@ -265,15 +263,9 @@ export default function Home() {
     )
   }
 
-  const reset = () => {
-    localStorage.setItem("hertl_CurStreak", JSON.stringify(0))
-    localStorage.setItem("hertl_TotalWins", JSON.stringify(0))
-    localStorage.setItem("hertl_TotalLosses", JSON.stringify(0))
-  }
-
   return (
     <div className="main">
-      <Header />
+      <Header number={guesses.length}/>
       <div className="main-body">
         {loading ? (
           <div>
@@ -290,9 +282,6 @@ export default function Home() {
             <div className="guess-input">
               <GuessBox />
               <GuessButton />
-              <Button onClick={reset}>
-                reset
-              </Button>
             </div>
           </div>
         )}

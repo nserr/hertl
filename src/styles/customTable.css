@@ -48,3 +48,9 @@
 .table-striped>tbody>tr:nth-child(odd)> td {
   color: #777;
 }
+
+@media only screen and (max-width: 600px) {
+  .custom-table thead tr, .custom-table thead th {
+    width: 4vmin;
+  }
+}
