@@ -101,10 +101,16 @@ export function Header(props) {
   }
 
   function StatsModal() {
-    const streak = parseInt(localStorage.getItem("hertl_CurStreak"), 10)
-    const totalWins = parseInt(localStorage.getItem("hertl_TotalWins"), 10)
-    const totalLosses = parseInt(localStorage.getItem("hertl_TotalLosses"), 10)
-    const winPercentage = Math.round(totalWins / (totalWins + totalLosses) * 100, 2)
+    let streak = parseInt(localStorage.getItem("hertl_CurStreak"), 10)
+    if (isNaN(streak)) { streak = 0 }
+
+    let totalWins = parseInt(localStorage.getItem("hertl_TotalWins"), 10)
+    if (isNaN(totalWins)) { totalWins = 0 }
+
+    let totalLosses = parseInt(localStorage.getItem("hertl_TotalLosses"), 10)
+    if (isNaN(totalLosses)) { totalLosses = 0 }
+
+    let winPercentage = Math.round(totalWins / (totalWins + totalLosses) * 100, 2)
 
     return (
       <>
@@ -158,6 +164,13 @@ export function Header(props) {
     )
   }
 
+  const reset = () => {
+    localStorage.removeItem("hertl_CurStreak")
+    localStorage.removeItem("hertl_TotalWins")
+    localStorage.removeItem("hertl_TotalLosses")
+
+  }
+
   return (
     <>
       <div className="header-main">
@@ -169,6 +182,9 @@ export function Header(props) {
         <RulesModal />
         <GuessCounter />
         <StatsModal />
+        <Button onClick={reset}>
+          Reset
+        </Button>
       </div>
     </>
   )
