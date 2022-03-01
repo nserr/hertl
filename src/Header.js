@@ -7,7 +7,7 @@ import './styles/Header.css'
 import './styles/customTable.css'
 
 export function Header() {
-  const [showRulesModal, setShowRulesModal] = useState(false)
+  const [showRulesModal, setShowRulesModal] = useState(true)
   const [showStatsModal, setShowStatsModal] = useState(false)
 
   const handleShowRulesModal = () => setShowRulesModal(true)
@@ -91,7 +91,7 @@ export function Header() {
             The arrows under Number point in the direction of the correct player's jersey number.
             {RulesTable2()}
             An orange cell indicates a similarity. Under Player, the correct player shares either their first or last name with your guess.<br />
-            Under Position, the correct player is a forward, but not the same position as your guess.            
+            Under Position, the correct player is a forward, but not the same position as your guess.
             {RulesTable3()}
             Use the clues from your guesses to narrow down the correct player!
           </Modal.Body>
@@ -101,6 +101,11 @@ export function Header() {
   }
 
   function StatsModal() {
+    const streak = parseInt(localStorage.getItem("hertl_CurStreak"), 10)
+    const totalWins = parseInt(localStorage.getItem("hertl_TotalWins"), 10)
+    const totalLosses = parseInt(localStorage.getItem("hertl_TotalLosses"), 10)
+    const winPercentage = Math.round(totalWins / (totalWins + totalLosses) * 100, 2)
+
     return (
       <>
         <Button variant="outline-light" className="modal-button" onClick={handleShowStatsModal}>
@@ -113,7 +118,32 @@ export function Header() {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Statistics
+            <div className="stats-container">
+              <div className="stat-container">
+                Current Streak:
+                <div className="stat">
+                  {streak}
+                </div>
+              </div>
+              <div className="stat-container">
+                Total Wins:
+                <div className="stat">
+                  {totalWins}
+                </div>
+              </div>
+              <div className="stat-container">
+                Total Losses:
+                <div className="stat">
+                  {totalLosses}
+                </div>
+              </div>
+              <div className="stat-container">
+                Win Percentage:
+                <div className="stat">
+                  {winPercentage}%
+                </div>
+              </div>
+            </div>
           </Modal.Body>
         </Modal>
       </>

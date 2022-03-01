@@ -21,3 +21,26 @@
 .modal-button {
   margin: 0 1rem 0 1rem;
 }
+
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: #ddd;
+  padding: 0.5em;
+  margin: 0.5em;
+  border-radius: 0.25em;
+}
+
+.stat {
+  font-weight: bold;
+  font-size: x-large;
+}
