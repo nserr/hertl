@@ -164,13 +164,6 @@ export function Header(props) {
     )
   }
 
-  const reset = () => {
-    localStorage.removeItem("hertl_CurStreak")
-    localStorage.removeItem("hertl_TotalWins")
-    localStorage.removeItem("hertl_TotalLosses")
-
-  }
-
   return (
     <>
       <div className="header-main">
@@ -182,9 +175,6 @@ export function Header(props) {
         <RulesModal />
         <GuessCounter />
         <StatsModal />
-        <Button onClick={reset}>
-          Reset
-        </Button>
       </div>
     </>
   )
