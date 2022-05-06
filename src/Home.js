@@ -208,6 +208,7 @@ export default function Home() {
         disabled={gameOver}
         id="guess-box"
         value={curGuess}
+        groupBy={(option) => (option.currentTeam.name)}
         onChange={(_event, newGuess) => { setCurGuess(newGuess) }}
         options={activePlayers}
         getOptionLabel={(option) => `${option.fullName}`}
